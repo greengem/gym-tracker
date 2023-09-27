@@ -3,7 +3,7 @@ import Heading from '@/components/Heading'
 import AvatarBlock from '@/components/AvatarBlock'
 import Dashboard from '@/components/Dashboard/Dashboard'
 
-export default function Home() {
+export default function Profile() {
   return (
     <PageContainer>
       <Heading title='Profile' />
