@@ -1,16 +1,25 @@
-import PageContainer from '@/components/PageContainer'
-import Heading from '@/components/Heading'
-import ExerciseSearch from '@/components/Exercises/ExerciseSearch'
+'use client'
+import React, { useState, useEffect } from 'react';
+import PageContainer from '@/components/PageContainer';
+import Heading from '@/components/Heading';
+import ExerciseSearch from '@/components/Exercises/ExerciseSearch';
 import ExerciseList from '@/components/Exercises/ExerciseList';
-//import { fetchExercises } from '@/lib/api';
+import ExerciseFilter from '@/components/Exercises/ExerciseFilter';
 
-export default async function ExercisesPage() {
+export default function ExercisesPage() {
+  const [selectedCategory, setSelectedCategory] = useState('cardio'); // Default category
 
-    return (
-        <PageContainer>
-            <Heading title='Exercises' />
-            <ExerciseSearch />
-            <ExerciseList />
-        </PageContainer>
-  )
+  useEffect(() => {
+    console.log("ExercisesPage category:", selectedCategory);
+  }, [selectedCategory]);
+  
+
+  return (
+    <PageContainer>
+      <Heading title='Exercises' />
+      <ExerciseSearch />
+      <ExerciseFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+      <ExerciseList category={selectedCategory} />
+    </PageContainer>
+  );
 }

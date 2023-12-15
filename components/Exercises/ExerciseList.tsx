@@ -1,54 +1,37 @@
-import { sql } from "@vercel/postgres";
+import React, { useState, useEffect } from 'react';
 
-export default async function Cart({
-  params
-} : {
-  params: { user: string }
-}): Promise<JSX.Element> {
-  const { rows } = await sql`SELECT * FROM exercises LIMIT 10`;
+type Exercise = {
+  name: string;
+  category: string;
+};
+
+type ExerciseListProps = {
+  category: string;
+};
+
+function ExerciseList({ category }: ExerciseListProps) {
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`/api/exercises?category=${category}`);
+      const data = await response.json();
+      console.log("Fetching exercises for category:", category);
+      setExercises(data);
+    }
+    fetchData();
+  }, [category]);
 
   return (
     <ul>
-{rows.map((row) => (
-  <li key={row.id} className="border-b-2">
-    <p>{row.name}</p>
-    <p>{row.force}</p>
-    <p>{row.level}</p>
-    <p>{row.mechanic}</p>
-    <p>{row.equipment}</p>
-
-    <p>Primary Muscles:</p>
-    {row.primaryMuscles && (
-      <ul>
-        {row.primaryMuscles.map((muscle, index) => (
-          <li key={index}>{muscle}</li>
-        ))}
-      </ul>
-    )}
-
-    <p>Secondary Muscles:</p>
-    {row.secondaryMuscles && (
-      <ul>
-        {row.secondaryMuscles.map((muscle, index) => (
-          <li key={index}>{muscle}</li>
-        ))}
-      </ul>
-    )}
-
-    <p>Instructions:</p>
-    {row.instructions && (
-      <ol>
-        {row.instructions.map((instruction, index) => (
-          <li key={index}>{instruction}</li>
-        ))}
-      </ol>
-    )}
-
-    <p>{row.category}</p>
-  </li>
-))}
-
-
+      {exercises.map((exercise, index) => (
+        <li key={index} className="border-b-2">
+          <p>{exercise.name}</p>
+          <p>{exercise.category}</p>
+        </li>
+      ))}
     </ul>
   );
 }
+
+export default ExerciseList;
